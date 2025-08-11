@@ -32,7 +32,7 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('text box', async ({ page }) => {
+test('QA-01 text box', { tag: ["@xpath"] }, async ({ page }) => {
   await page.goto('https://demoqa.com/text-box');
 
   await page.locator("//input[@placeholder='Full Name']").fill(USER.fullname);
@@ -43,11 +43,11 @@ test('text box', async ({ page }) => {
 
   for (const [key, value] of Object.entries(USER)) {
     console.log(`Checking ${key} value`);
-    await expect(page.locator("//div[@id='output']")).toContainText(value);
+    await expect(page.locator("//*[@id='output']")).toContainText(value);
   };
 });
 
-test('check box', async ({ page }) => {
+test('QA-02 check box', { tag: ["@xpath"] }, async ({ page }) => {
   await page.goto('https://demoqa.com/checkbox');
 
   await page.locator(toggleButton('Home')).click();
@@ -58,7 +58,7 @@ test('check box', async ({ page }) => {
   await expect(page.locator("//*[@id='result']")).toContainText('You have selected :private');
 });
 
-test('radio button', async ({ page }) => {
+test('QA-3 radio button', { tag: ["@xpath"] }, async ({ page }) => {
   const resultLocator = page.locator("//*[@id='app']//p");
   await page.goto('https://demoqa.com/radio-button');
 
@@ -71,7 +71,7 @@ test('radio button', async ({ page }) => {
   await expect(page.locator(radioButton('No'))).toBeDisabled();
 });
 
-test('buttons', async ({ page }) => {
+test('QA-4 buttons', { tag: ["@xpath"] }, async ({ page }) => {
   await page.goto('https://demoqa.com/buttons');
 
   await page.locator("//button[text() = 'Double Click Me']").dblclick();
