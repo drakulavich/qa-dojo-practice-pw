@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 const USER = {
   email: "dra@kula.vich",
   name: "drakulavich",
-  password: "12345"
+  password: "12345",
 };
 
 test(
@@ -57,36 +57,59 @@ test.describe("Logged user", async () => {
     };
 
     await page.getByRole("link", { name: "New Article" }).click();
-    await page.getByRole("textbox", { name: "Article Title" }).fill(article.title);
-    await page.getByRole("textbox", { name: "What's this article about?" }).fill(article.about);
-    await page.getByRole("textbox", { name: "Write your article (in" }).fill(article.content);
+    await page
+      .getByRole("textbox", { name: "Article Title" })
+      .fill(article.title);
+    await page
+      .getByRole("textbox", { name: "What's this article about?" })
+      .fill(article.about);
+    await page
+      .getByRole("textbox", { name: "Write your article (in" })
+      .fill(article.content);
     await page.getByRole("textbox", { name: "Enter tags" }).fill(article.tags);
     await page.getByRole("button", { name: "Publish Article" }).click();
 
-    await expect(page.getByRole("heading", { name: article.title })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: article.title })
+    ).toBeVisible();
     await expect(page.getByText(article.content)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Delete Article" }).first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "Post Comment" })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Delete Article" }).first()
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Post Comment" })
+    ).toBeVisible();
   });
 
   test("QD-014 show my articles", { tag: "@article" }, async ({ page }) => {
-    await page.locator('.navbar').getByRole("link", { name: USER.name }).click();
+    await page
+      .locator(".navbar")
+      .getByRole("link", { name: USER.name })
+      .click();
 
-    await page.getByRole('link', { name: 'My Articles' }).click();
-    await expect(page).toHaveURL('https://demo.learnwebdriverio.com/@drakulavich/');
-    await expect(page.getByRole('link', { name: 'Test Article ayak 2'})).toBeVisible();
+    await page.getByRole("link", { name: "My Articles" }).click();
+    await expect(page).toHaveURL(
+      "https://demo.learnwebdriverio.com/@drakulavich/"
+    );
+    await expect(
+      page.getByRole("link", { name: "Test Article ayak 2" })
+    ).toBeVisible();
 
-    await page.getByRole('link', { name: 'Favorited Articles' }).click();
-    await expect(page).toHaveURL('https://demo.learnwebdriverio.com/@drakulavich/favorites');
-    await expect(page.getByRole('link', { name: 'NEW TITLE UPDATE'})).toBeVisible();
+    await page.getByRole("link", { name: "Favorited Articles" }).click();
+    await expect(page).toHaveURL(
+      "https://demo.learnwebdriverio.com/@drakulavich/favorites"
+    );
+    await expect(
+      page.getByRole("link", { name: "NEW TITLE UPDATE" })
+    ).toBeVisible();
   });
 
   test("QD-015 can log out", { tag: "@auth" }, async ({ page }) => {
-    await page.getByRole("link", { name: 'Settings' }).click();
+    await page.getByRole("link", { name: "Settings" }).click();
 
     await page.getByRole("button", { name: "click here to logout" }).click();
 
     await expect(page).toHaveURL("https://demo.learnwebdriverio.com/");
     await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
-  });  
+  });
 });
