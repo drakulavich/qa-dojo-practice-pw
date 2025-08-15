@@ -54,13 +54,27 @@ const randomArticle = () => {
   };
 };
 
-const createArticle = async (page: Page, article) => {
+const openEditor = async (page: Page) => {
   await editorLink(page).click();
-  await editorTitleInput(page).fill(article.title);
-  await editorDescriptionInput(page).fill(article.about);
-  await editorBodyText(page).fill(article.content);
-  await editorTagsInput(page).fill(article.tags);
+};
+
+const publishArticle = async (page: Page) => {
   await publishButton(page).click();
+};
+
+const createArticle = async (page: Page, article) => {
+  if (article.title !== undefined) {
+    await editorTitleInput(page).fill(article.title);
+  }
+  if (article.about !== undefined) {
+    await editorDescriptionInput(page).fill(article.about);
+  }
+  if (article.content !== undefined) {
+    await editorBodyText(page).fill(article.content);
+  }
+  if (article.tags !== undefined) {
+    await editorTagsInput(page).fill(article.tags);
+  }
 };
 
 const registerUser = async (page: Page, user) => {
@@ -93,7 +107,9 @@ test(
 
     for (let i = 0; i < 3; i++) {
       const article = randomArticle();
+      await openEditor(page);
       await createArticle(page, article);
+      await publishArticle(page);
 
       await goToMain(page);
 
@@ -143,7 +159,9 @@ test.describe("Logged user", async () => {
   test("QD-013 create new article", { tag: "@article" }, async ({ page }) => {
     const article = randomArticle();
 
+    await openEditor(page);
     await createArticle(page, article);
+    await publishArticle(page);
 
     await expect(page.locator('[data-qa-id="article-title"]')).toContainText(
       article.title
@@ -159,7 +177,9 @@ test.describe("Logged user", async () => {
 
   test("QD-014 show my articles", { tag: "@article" }, async ({ page }) => {
     const article = randomArticle();
+    await openEditor(page);
     await createArticle(page, article);
+    await publishArticle(page);
 
     await page.goto(`https://demo.learnwebdriverio.com/@${USER.username}`);
 
